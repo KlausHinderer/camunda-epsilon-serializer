@@ -10,8 +10,6 @@ import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.variable.impl.value.ObjectValueImpl;
 import org.camunda.bpm.engine.variable.value.TypedValue;
 
-import java.io.IOException;
-
 /**
  *
  */

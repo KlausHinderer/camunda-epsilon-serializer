@@ -1,3 +1,7 @@
+/*
+ * Released to the public domain.
+ */
+
 package de.metaphisto.camunda.bpmnparse;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -14,16 +18,17 @@ import java.util.Collections;
 /**
  * https://docs.camunda.org/manual/7.8/user-guide/process-engine/transactions-in-processes/
  * <p>
- * Serialisierung:
- * async-before: Take Listener an die Transition
- * async-after: End Listener an die Activity
- * async-before bei Start: Exception, falls always_serialize_on_send false ist
+ * Serialization:
+ * async-before: add Take Listener to the transition
+ * async-after: add End Listener to the Activity
+ * async-before at Start: throw Exception, if always_serialize_on_send is false
  * UserTask: Start Listener
  * <p>
- * Deserialisierung:
+ * Deserialization:
  * async-before: start Listener
  * async-after: take Listener
  * UserTask: EndListener
+ *
  */
 public class AddSerializationListenerBpmnParseListener extends AbstractBpmnParseListener {
 

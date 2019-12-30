@@ -9,5 +9,5 @@ import org.camunda.bpm.engine.variable.value.TypedValue;
  */
 public interface CamundaVariableVisitor {
 
-    public TypedValue visit(ExecutionEntity executionEntity, String variableName, TypedValue value, CoreVariableInstance coreVariableInstance);
+    TypedValue visit(ExecutionEntity executionEntity, String variableName, TypedValue value, CoreVariableInstance coreVariableInstance);
 }

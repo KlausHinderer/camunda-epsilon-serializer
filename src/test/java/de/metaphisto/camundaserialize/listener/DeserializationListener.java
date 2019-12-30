@@ -11,8 +11,6 @@ import org.camunda.bpm.engine.variable.impl.value.ObjectValueImpl;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.camunda.bpm.engine.variable.value.TypedValue;
 
-import java.util.Date;
-
 /**
  *
  */
@@ -28,6 +26,7 @@ public class DeserializationListener implements ExecutionListener, CamundaVariab
         String variableType = ((ObjectValue) value).getObjectTypeName();
 
         // Beim Wiederanstoßen eines UserTasks können von außen weitere Variablen gesetzt werden, die nicht serialisiert wurden, sondern nur deserialisiert vorliegen.
+        // Resuming a UserTask, additional variables can be set externally that are only available in their serialized value.
         Object deserialized = null;
         if (((ObjectValue) value).isDeserialized()) {
             deserialized = value.getValue();
@@ -40,8 +39,7 @@ public class DeserializationListener implements ExecutionListener, CamundaVariab
                 throw new RuntimeException(e);
             }
         }
-        TypedValue typedValue = new ObjectValueImpl(deserialized,null, "json", variableType, true);
-        return typedValue;
+        return new ObjectValueImpl(deserialized,null, "json", variableType, true);
     }
 
     private Object deserialize(String serialized) {

@@ -1,3 +1,7 @@
+/*
+ * Released to the public domain.
+ */
+
 package de.metaphisto.camunda.plugin;
 
 import de.metaphisto.camunda.bpmnparse.AddSerializationListenerBpmnParseListener;
@@ -16,11 +20,14 @@ import java.util.List;
  * Bei jedem Schreibzugriff auf eine Prozessvariable wird diese von Camunda automatisch serialisiert.
  * Dieses Plugin deaktiviert die Camunda-Serialisierung komplett. An den Stellen im Prozess, in denen die Variablen in die Datenbank gesichert werden (UserTasks, async-Punkte), hängt dieses Plugin Listener, die sich um die Serialisierung kümmern. Diese Listener sind vom Anwender bereitzustellen und gemeinsam mit dem Prozess zu deployen.
  *
+ *
+ * Plugin to improve performance for processes that write and update huge objects in process variables.
  */
 public class EpsilonSerializerPlugin extends AbstractProcessEnginePlugin {
 
     private String serializationListenerClass;
     private String deserializationListenerClass;
+    private boolean alwaysSerializeOnSendTasksOrCallActivities = false;
 
     @Override
     public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
@@ -32,11 +39,12 @@ public class EpsilonSerializerPlugin extends AbstractProcessEnginePlugin {
         AddSerializationListenerBpmnParseListener addSerializationListenerBpmnParseListener = new AddSerializationListenerBpmnParseListener();
         addSerializationListenerBpmnParseListener.setDeserializationListenerClass(deserializationListenerClass);
         addSerializationListenerBpmnParseListener.setSerializationListenerClass(serializationListenerClass);
+        addSerializationListenerBpmnParseListener.setAlwaysSerializeOnSendTasksOrCallActivities(alwaysSerializeOnSendTasksOrCallActivities);
         customPostBPMNParseListeners.add(addSerializationListenerBpmnParseListener);
 
         processEngineConfiguration.setCustomPreVariableSerializers(Collections.singletonList(new EpsilonSerializer("json")));
 
-        //Fallback zum ObjectSerializer verhindern.
+        //prevent fallback to ObjectSerializer.
         processEngineConfiguration.setDefaultSerializationFormat("json");
     }
 
@@ -54,5 +62,13 @@ public class EpsilonSerializerPlugin extends AbstractProcessEnginePlugin {
 
     public void setDeserializationListenerClass(String deserializationListenerClass) {
         this.deserializationListenerClass = deserializationListenerClass;
+    }
+
+    public boolean isAlwaysSerializeOnSendTasksOrCallActivities() {
+        return alwaysSerializeOnSendTasksOrCallActivities;
+    }
+
+    public void setAlwaysSerializeOnSendTasksOrCallActivities(boolean alwaysSerializeOnSendTasksOrCallActivities) {
+        this.alwaysSerializeOnSendTasksOrCallActivities = alwaysSerializeOnSendTasksOrCallActivities;
     }
 }

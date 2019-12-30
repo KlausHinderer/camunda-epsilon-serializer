@@ -1,6 +1,9 @@
+/*
+ * Released to the public domain.
+ */
+
 package de.metaphisto.camunda.serializer;
 
-import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.variable.serializer.AbstractObjectValueSerializer;
 import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
@@ -9,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * Disables serialization for anything but primitive values.
  */
 public class EpsilonSerializer extends AbstractObjectValueSerializer {
 
